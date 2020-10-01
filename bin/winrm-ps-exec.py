@@ -18,12 +18,14 @@ def main():
         session = winrm.Session(host, auth=(username, password))
         result = session.run_ps(command)
 
-        detector = Detector()
-        the_encoding = detector.detect(result.std_out)
-        stdOut = result.std_out.decode(the_encoding)
+        result.std_out = result.std_out.decode("utf-8", "replace")
+        result.std_err = result.std_err.decode("utf-8", "replace")
 
-        the_encoding = detector.detect(result.std_err)
-        stdErr = result.std_err.decode(the_encoding)
+        stdOut = result.std_out
+        stdErr = result.std_err
+
+
+
 
         resultDict = {
             'std_out': stdOut,
